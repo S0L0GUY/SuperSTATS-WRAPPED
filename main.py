@@ -3,6 +3,7 @@ import csv
 import requests
 from collections import Counter
 
+# Load secrets from the JSON file
 secrets = json.load(open("secrets.json"))
 
 def download_sheets_raw(gid):
@@ -37,10 +38,9 @@ rounds_recorded = len(data)
 # Count the amount of stats recorded on 3255
 stats_on_3255 = [row["Name"] for row in data if row["Team"] == "3255"]
 most_stats_on_3255 = Counter(stats_on_3255).most_common(1)[0][0]
-
 highest_stats_on_3255 = Counter(stats_on_3255).most_common(1)[0][1]
 
-# Get the unique team numbers names
+# Get the unique team members' names
 filtered_team_members = [row["Name"] for row in data if row["Name"].isascii()]
 unique_team_members = list(set(filtered_team_members))
 
@@ -49,34 +49,50 @@ highest_stats_taken_name = Counter(filtered_team_members).most_common(1)[0][0]
 highest_stats_taken = Counter(filtered_team_members).most_common(1)[0][1]
 
 excluded_names = [
-    "Null",
-    "CO",
-    "N/A 0",
-    "AW",
-    "AN",
-    "XB",
-    "HS",
-    "MC",
-    "BK",
-    "AM",
-    "PS",
-    "Calc"
+    "Null", "CO", "N/A 0", "AW", "AN", "XB", "HS", "MC", "BK", "AM", "PS", "Calc"
 ]
 
 final_team_members = [name for name in unique_team_members if name.strip() not in excluded_names]
 
+# See what color was documented more
+most_documented_color = Counter([row["Team Color"] for row in data]).most_common(1)[0][0]
+most_documented_color = "Red" if most_documented_color == "R" else "Blue"
+
+# Get the most stats taken on amp
+amp_stats = Counter([row["TELE_AMP_INT_1"] for row in data]).most_common(1)[0][1]
+amp_stats_name = Counter([row["Name"] for row in data if row["TELE_AMP_INT_1"] == "1"]).most_common(1)[0][0]
+
+# Get the most stats taken on speaker
+speaker_stats = Counter([row["TELE_SPEAKER_INT_2"] for row in data]).most_common(1)[0][1]
+speaker_stats_name = Counter([row["Name"] for row in data if row["TELE_SPEAKER_INT_2"] == "1"]).most_common(1)[0][0]
+
+# Get the most defense points
+defense_stats = Counter([row["INFO_DEFENSE_INT_1"] for row in data]).most_common(1)[0][1]
+defense_stats_team = Counter([row["Team"] for row in data if row["INFO_DEFENSE_INT_1"] == "1"]).most_common(1)[0][0]
+
+# Get the most shuffles made in a match
+shuffles_stats = Counter([row["TELE_SHUFFLE_INT_1"] for row in data]).most_common(1)[0][1]
+shuffles_stats_name = Counter([row["Name"] for row in data if row["TELE_SHUFFLE_INT_1"] == "1"]).most_common(1)[0][0]
+
 # Generate the wrapped message
-wrapped_message = f"Hey {', '.join(final_team_members)},\n\n"
-
+wrapped_message = f"Hey{', '.join(final_team_members)}. You where part of this years SuperSTATS Wrapped! 🎉\n\n"
 wrapped_message += "Welcome to SuperSTATS Wrapped! Great year with Crescendo! 🎉\n\n"
-
 wrapped_message += f"A total of {rounds_recorded} rounds were recorded this year, that's a lot of rounds! 🤯\n\n"
-
 wrapped_message += "3255 is my favorite team by the way! 😏 "
-
 wrapped_message += f"Speaking of 3255, {most_stats_on_3255} took the lead and recorded {highest_stats_on_3255} stats on 3255 this year! 🥇\n\n"
-
-wrapped_message += f"But you know what's even more impressive? {highest_stats_taken_name} took {highest_stats_taken} stats this year! Thats a lot of stats! 🤯 "
-wrapped_message += f"{highest_stats_taken_name}, thats alot of stats! 🎉\n\n"
+wrapped_message += f"But you know what's even more impressive? {highest_stats_taken_name} took the lead and recorded {highest_stats_taken} rounds this year! 🤯 "
+wrapped_message += f"{highest_stats_taken_name}, thats a lot of stats! 🎉\n\n"
+wrapped_message += f"{most_documented_color} was the most documented color this year! 🌈 How did that happen? 👀\n\n"
+wrapped_message += "Okay, time for rapid fire! 🚀\n\n"
+wrapped_message += f"Most stats taken on amp all time: {amp_stats} by {amp_stats_name} 🤔\n"
+wrapped_message += f"Most stats taken on speaker all time: {speaker_stats} by {speaker_stats_name} 🤔\n"
+wrapped_message += f"Most defense points all time: {defense_stats} by {defense_stats_team}🤔\n"
+wrapped_message += f"Most shuffles recorded all time: {shuffles_stats} by {shuffles_stats_name} 🤔\n\n"
+wrapped_message += "Heres to a great year of SuperSTATS! 🎉\n\n"
+wrapped_message += "GitHub Code for my fellow software nerds: https://github.com/S0L0GUY/SuperSTATS-WRAPPED 💻\n"
+wrapped_message += "This program was made in 2 days so please don't judge me too hard is the stats are wrong. 😅\n\n"
+wrapped_message += "Shoutout to Tej! 🎉 He should get a raise. 💰\n"
+wrapped_message += "Made by @Evan Grinnell ❤️\n"
+wrapped_message += "P.S, you should deffenetally fallow me on GitHub or I will cry. 😭"
 
 print(wrapped_message)
