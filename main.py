@@ -31,42 +31,52 @@ def download_sheets_raw(gid):
 
 data = download_sheets_raw(secrets["GID_RAW"])
 
-# Extract team member names and remove non-ASCII characters
-team_members = [entry['Name'].encode('ascii', 'ignore').decode('ascii') for entry in data]
-unique_team_members = set(team_members)
+# Count the amount of rounds recorded
+rounds_recorded = len(data)
 
-# Count stats taken by each member
-stats_count = Counter(team_members)
+# Count the amount of stats recorded on 3255
+stats_on_3255 = [row["Name"] for row in data if row["Team"] == "3255"]
+most_stats_on_3255 = Counter(stats_on_3255).most_common(1)[0][0]
 
-# Count stats taken on team 3255
-stats_on_3255 = [entry for entry in data if entry['Team'] == '3255']
-stats_on_3255_count = Counter([entry['Name'] for entry in stats_on_3255])
+highest_stats_on_3255 = Counter(stats_on_3255).most_common(1)[0][1]
 
-# Count stats taken on AMP and SPEAKER
-amp_stats = [entry for entry in data if entry['AUTO_AMP_INT_2'] or entry['TELE_AMP_INT_1']]
-speaker_stats = [entry for entry in data if entry['AUTO_SPEAKER_INT_5'] or entry['TELE_SPEAKER_INT_2']]
-amp_stats_count = Counter([entry['Name'] for entry in amp_stats])
-speaker_stats_count = Counter([entry['Name'] for entry in speaker_stats])
+# Get the unique team numbers names
+filtered_team_members = [row["Name"] for row in data if row["Name"].isascii()]
+unique_team_members = list(set(filtered_team_members))
+
+# Get the person who took the most stats
+highest_stats_taken_name = Counter(filtered_team_members).most_common(1)[0][0]
+highest_stats_taken = Counter(filtered_team_members).most_common(1)[0][1]
+
+excluded_names = [
+    "Null",
+    "CO",
+    "N/A 0",
+    "AW",
+    "AN",
+    "XB",
+    "HS",
+    "MC",
+    "BK",
+    "AM",
+    "PS",
+    "Calc"
+]
+
+final_team_members = [name for name in unique_team_members if name.strip() not in excluded_names]
 
 # Generate the wrapped message
-filtered_team_members = [name for name in unique_team_members if 'â' not in name]
-wrapped_message = f"Hey {', '.join(filtered_team_members)},\n\n"
-wrapped_message += "You ready for this year's wrapped?\n\n"
-wrapped_message += "Here are some fun stats from the year:\n\n"
-wrapped_message += f"🏆 Most stats taken: {stats_count.most_common(1)[0][0]} with {stats_count.most_common(1)[0][1]} stats\n"
-wrapped_message += f"🔢 Most stats taken on team 3255: {stats_on_3255_count.most_common(1)[0][0]} with {stats_on_3255_count.most_common(1)[0][1]} stats\n"
-wrapped_message += f"🎸 Most stats taken on AMP: {amp_stats_count.most_common(1)[0][0]} with {amp_stats_count.most_common(1)[0][1]} stats\n"
-wrapped_message += f"🔊 Most stats taken on SPEAKER: {speaker_stats_count.most_common(1)[0][0]} with {speaker_stats_count.most_common(1)[0][1]} stats\n"
+wrapped_message = f"Hey {', '.join(final_team_members)},\n\n"
 
-# Additional statistics
-total_stats = len(data)
-wrapped_message += f"\n📊 Total stats recorded: {total_stats}\n"
+wrapped_message += "Welcome to SuperSTATS Wrapped! Great year with Crescendo! 🎉\n\n"
 
-average_stats_per_member = total_stats / len(unique_team_members)
-wrapped_message += f"📈 Average stats per team member: {average_stats_per_member:.2f}\n"
+wrapped_message += f"A total of {rounds_recorded} rounds were recorded this year, that's a lot of rounds! 🤯\n\n"
 
-most_active_member = stats_count.most_common(1)[0][0]
-most_active_member_stats = stats_count.most_common(1)[0][1]
-wrapped_message += f"🔥 Most active member: {most_active_member} with {most_active_member_stats} stats\n"
+wrapped_message += "3255 is my favorite team by the way! 😏 "
+
+wrapped_message += f"Speaking of 3255, {most_stats_on_3255} took the lead and recorded {highest_stats_on_3255} stats on 3255 this year! 🥇\n\n"
+
+wrapped_message += f"But you know what's even more impressive? {highest_stats_taken_name} took {highest_stats_taken} stats this year! Thats a lot of stats! 🤯 "
+wrapped_message += f"{highest_stats_taken_name}, thats alot of stats! 🎉\n\n"
 
 print(wrapped_message)
