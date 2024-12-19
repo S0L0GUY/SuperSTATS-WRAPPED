@@ -41,15 +41,15 @@ most_stats_on_3255 = Counter(stats_on_3255).most_common(1)[0][0]
 highest_stats_on_3255 = Counter(stats_on_3255).most_common(1)[0][1]
 
 # Get the unique team members' names
-filtered_team_members = [row["Name"] for row in data if row["Name"].isascii()]
-unique_team_members = list(set(filtered_team_members))
-
 excluded_names = [
     "Null", "CO", "N/A 0", "AW", "AN", "XB", "HS", "MC", "BK", "AM", "PS", "Calc"
 ]
 
-final_team_members = [name for name in unique_team_members if name.strip() not in excluded_names]
-final_team_members = [f"@{name}" for name in final_team_members]
+filtered_team_members = [row["Name"] for row in data if row["Name"].isascii()]
+filtered_team_members = [name for name in filtered_team_members if name.strip() not in excluded_names]
+unique_team_members = list(set(filtered_team_members))
+
+final_team_members = [f"@{name}" for name in unique_team_members]
 
 # Get the person who took the most stats
 highest_stats_taken_name = Counter(filtered_team_members).most_common(1)[0][0]
@@ -76,26 +76,37 @@ defense_stats_team = Counter([row["Team"] for row in data if row["INFO_DEFENSE_I
 
 # Get the most shuffles made in a match
 shuffles_stats = Counter([row["TELE_SHUFFLE_INT_1"] for row in data]).most_common(1)[0][1]
+shuffle_stats_name = Counter([row["Name"] for row in data if row["TELE_SHUFFLE_INT_1"] == "1"]).most_common(1)[0][0]
+shuffle_stats_name = f"@{shuffle_stats_name}"
+
+# Generate a leaderboard for most stats taken
+leaderboard_counter = Counter(name for name in filtered_team_members if name)
+leaderboard = "\n".join([f"{i+1}. @{name}: {count} rounds recorded." for i, (name, count) in enumerate(leaderboard_counter.most_common())])
 
 # Generate the wrapped message
 wrapped_message = f"Hey{', '.join(final_team_members)}. You where part of this years SuperSTATS Wrapped! 🎉\n\n"
 wrapped_message += "Welcome to SuperSTATS Wrapped! Great year with Crescendo! 🎉\n\n"
 wrapped_message += f"A total of {rounds_recorded} rounds were recorded this year, that's a lot of rounds! 🤯\n\n"
 wrapped_message += "3255 is my favorite team by the way! 😏 "
-wrapped_message += f"Speaking of 3255, {most_stats_on_3255} took the lead and recorded {highest_stats_on_3255} stats on 3255 this year! 🥇\n\n"
+wrapped_message += f"Speaking of 3255, {most_stats_on_3255} took the lead and recorded {highest_stats_on_3255} rounds on 3255 this year! 🥇\n\n"
 wrapped_message += f"But you know what's even more impressive? {highest_stats_taken_name} recorded the most rounds this year with {highest_stats_taken} rounds recorded! 🤯 "
 wrapped_message += f"{highest_stats_taken_name}, thats a lot of stats! 🎉\n\n"
+wrapped_message += "If we laid out all of the wires used in the robots this year, it would prababally go really far. 🔌📏\n\n"
 wrapped_message += f"{most_documented_color} was the most documented color this year! 🌈 How did that happen? 👀\n\n"
 wrapped_message += "Okay, time for rapid fire! 🚀\n\n"
-wrapped_message += f"Most stats taken on amp all time: {amp_stats} by {amp_stats_name} 🤔\n"
-wrapped_message += f"Most stats taken on speaker all time: {speaker_stats} by {speaker_stats_name} 🤔\n"
-wrapped_message += f"Total recorded shuffles: {shuffles_stats} 🤔\n"
-wrapped_message += f"Most defense points all time: {defense_stats} by {defense_stats_team}🤔\n\n"
+wrapped_message += f"Most stats taken on amp was {amp_stats_name} with {amp_stats} recorded this year. 🤔\n"
+wrapped_message += f"Most stats taken on speaker was {speaker_stats} taken by {speaker_stats_name} 🤔\n"
+wrapped_message += f"The person who recorded the most shuffles was {shuffle_stats_name} with {shuffles_stats} recorded. 🤔\n"
+wrapped_message += f"The team with the most defense points was {defense_stats_team} with an ending score of {defense_stats}. 🤔\n\n"
+wrapped_message += f"Its not a challenge, but there is a leaderboard: 👀\n{leaderboard}\n\n"
+wrapped_message += "Water games anyone? https://youtu.be/zaYAjoagqTk?si=D_f9AAoUCgC23jDF 🌊\n\n"
+
+# Closing Messages
 wrapped_message += "Heres to a great year of SuperSTATS! 🎉\n\n"
 wrapped_message += "GitHub Code for my fellow software nerds: https://github.com/S0L0GUY/SuperSTATS-WRAPPED 💻\n"
-wrapped_message += "This program was made in 2 days so please don't judge me too hard is the stats are wrong. 😅\n\n"
+wrapped_message += "This program was made in like 2 days so please don't judge me too hard if the stats are wrong. 😅\n\n"
 wrapped_message += "Shoutout to Tej! 🎉 He should get a raise. 💰\n"
 wrapped_message += "Made by @Evan Grinnell ❤️\n"
-wrapped_message += "P.S, you should deffenetally follow me on GitHub for 10 years of good luck. 😭"
+wrapped_message += "P.S, you should deffenetally follow me on GitHub or I will cry. 😭"
 
 print(wrapped_message)
