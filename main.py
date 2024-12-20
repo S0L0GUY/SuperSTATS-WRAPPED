@@ -99,7 +99,7 @@ wrapped_message += f"Most stats taken on speaker was {speaker_stats} taken by {s
 wrapped_message += f"The person who recorded the most shuffles was {shuffle_stats_name} with {shuffles_stats} recorded. 🤔\n"
 wrapped_message += f"The team with the most defense points was {defense_stats_team} with an ending score of {defense_stats}. 🤔\n\n"
 wrapped_message += f"Its not a challenge, but there is a leaderboard: 👀\n{leaderboard}\n\n"
-wrapped_message += "Water games anyone? https://youtu.be/zaYAjoagqTk?si=D_f9AAoUCgC23jDF 🌊\n\n"
+wrapped_message += "Water games confirmed? https://youtu.be/zaYAjoagqTk?si=D_f9AAoUCgC23jDF 🌊\n\n"
 
 # Closing Messages
 wrapped_message += "Heres to a great year of SuperSTATS! 🎉\n\n"
