@@ -90,8 +90,8 @@ wrapped_message += f"A total of {rounds_recorded} rounds were recorded this year
 wrapped_message += "3255 is my favorite team by the way! 😏 "
 wrapped_message += f"Speaking of 3255, {most_stats_on_3255} took the lead and recorded {highest_stats_on_3255} rounds on 3255 this year! 🥇\n\n"
 wrapped_message += f"But you know what's even more impressive? {highest_stats_taken_name} recorded the most rounds this year with {highest_stats_taken} rounds recorded! 🤯 "
-wrapped_message += f"{highest_stats_taken_name}, thats a lot of stats! 🎉\n\n"
-wrapped_message += "If we laid out all of the wires used in the robots this year, it would prababally go really far. 🔌📏\n\n"
+wrapped_message += f"{highest_stats_taken_name}, that's a lot of stats! 🎉\n\n"
+wrapped_message += "If we laid out all of the wires used in the robots this year, it would probably go really far. 🔌📏\n\n"
 wrapped_message += f"{most_documented_color} was the most documented color this year! 🌈 How did that happen? 👀\n\n"
 wrapped_message += "Okay, time for rapid fire! 🚀\n\n"
 wrapped_message += f"Most stats taken on amp was {amp_stats_name} with {amp_stats} recorded this year. 🤔\n"
@@ -105,8 +105,8 @@ wrapped_message += "Water games anyone? https://youtu.be/zaYAjoagqTk?si=D_f9AAoU
 wrapped_message += "Heres to a great year of SuperSTATS! 🎉\n\n"
 wrapped_message += "GitHub Code for my fellow software nerds: https://github.com/S0L0GUY/SuperSTATS-WRAPPED 💻\n"
 wrapped_message += "This program was made in like 2 days so please don't judge me too hard if the stats are wrong. 😅\n\n"
-wrapped_message += "Shoutout to Tej! 🎉 He should get a raise. 💰\n"
+wrapped_message += "Shoutout to @Tej! 🎉 He should get a raise. 💰\n"
 wrapped_message += "Made by @Evan Grinnell ❤️\n"
-wrapped_message += "P.S, you should deffenetally follow me on GitHub or I will cry. 😭"
+wrapped_message += "P.S, you should definitely follow me on GitHub or I will cry. 😭"
 
 print(wrapped_message)
